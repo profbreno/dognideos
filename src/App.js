@@ -1,8 +1,57 @@
 import "./App.css";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+
+function Item(props) {
+  const item = props.item;
+  return (
+    <div className="item">
+      <Link to={`/view/${item._id}`}>
+        <img src={item.img} alt={item.nome} />
+      </Link>
+      <h3>{item.nome}</h3>
+      <div className="item__buttons">
+        <Link to={`/delete/${item._id}`}>Deletar</Link>/
+        <Link to={`/edit/${item._id}`}>Editar</Link>
+      </div>
+    </div>
+  );
+}
 
 function ListaItem() {
-  return <div className="ListaItem">Olá Mundo</div>;
+  console.log("Lista carregada");
+
+  //useState
+  const [listaResultadoApi, atualizarListaResultado] = useState("");
+
+  //useEffect
+  useEffect(() => {
+    console.log({ listaResultadoApi });
+
+    if (!listaResultadoApi) {
+      obterLista();
+    }
+  });
+
+  const obterLista = async () => {
+    const result = await fetch("https://node-backend-nuvem.herokuapp.com/");
+
+    console.log({ result });
+    const dados = await result.json();
+    console.log({ dados });
+
+    atualizarListaResultado(dados);
+  };
+  if (!listaResultadoApi) {
+    return <div>Carregando...</div>;
+  }
+  return (
+    <div className="lista-item">
+      {listaResultadoApi.map((item, index) => (
+        <Item item={item} key={index} />
+      ))}
+    </div>
+  );
 }
 //function VisualizarItem(props) {}
 //function AdicionarItem(props) {}
@@ -17,15 +66,14 @@ function NotFound() {
 function Header() {
   return (
     <div className="Header">
-      <h1>React Router DOM</h1>
-      <h2>Redux + React + Router</h2>
+      <h1>Lista de Dognídeos</h1>
     </div>
   );
 }
 function Footer() {
   return (
     <div className="Footer">
-      <p>React Router DOM</p>
+      <p>Desenvolvido por: @ProfBreno</p>
     </div>
   );
 }
