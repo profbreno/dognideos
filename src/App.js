@@ -1,23 +1,44 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { Switch, Route } from "react-router-dom";
+
+function ListaItem() {
+  return <div className="ListaItem">Olá Mundo</div>;
+}
+//function VisualizarItem(props) {}
+//function AdicionarItem(props) {}
+//function DeleteItem(props) {}
+function NotFound() {
+  return (
+    <div className="NotFound">
+      <h1>Not Found</h1>
+    </div>
+  );
+}
+function Header() {
+  return (
+    <div className="Header">
+      <h1>React Router DOM</h1>
+      <h2>Redux + React + Router</h2>
+    </div>
+  );
+}
+function Footer() {
+  return (
+    <div className="Footer">
+      <p>React Router DOM</p>
+    </div>
+  );
+}
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Header />
+      <Switch>
+        <Route path="/" exact={true} component={ListaItem} />
+        <Route path="*" component={NotFound} />
+      </Switch>
+      <Footer />
     </div>
   );
 }
