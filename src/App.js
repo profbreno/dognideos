@@ -66,7 +66,7 @@ function NotFound() {
 function Header() {
   return (
     <div className="Header">
-      <h1>Lista de Dognídeos</h1>
+      <h1>Lista de Dognídeos de Lilinha</h1>
     </div>
   );
 }
