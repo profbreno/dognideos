@@ -53,20 +53,44 @@ function ListaItem() {
     </div>
   );
 }
-//function VisualizarItem(props) {}
-//function AdicionarItem(props) {}
-//function DeleteItem(props) {}
-function NotFound() {
+function VisualizarItem(props) {
+  const id = props.match.params.id;
+
+  //useState
+  const [item, setItem] = useState("");
+
+  //useEffect
+  useEffect(() => {
+    if (!item) {
+      getItemData();
+    }
+  });
+
+  const getItemData = async () => {
+    const result = await fetch(
+      "https://node-backend-nuvem.herokuapp.com/view/" + id
+    );
+    const dados = await result.json();
+    setItem(dados);
+  };
+  if (!item) {
+    return <div>Carregando...</div>;
+  }
+
   return (
-    <div className="NotFound">
-      <h1>Not Found</h1>
+    <div className="visualizar-item">
+      <Item item={item} />
+      <Link to={`/`}>Voltar</Link>
     </div>
   );
 }
+//function AdicionarItem(props) {}
+//function DeleteItem(props) {}
+//function EditItem(props) {
 function Header() {
   return (
     <div className="Header">
-      <h1>Lista de Dognídeos de Lilinha</h1>
+      <h1>Lista de Dognídeos</h1>
     </div>
   );
 }
@@ -84,7 +108,7 @@ function App() {
       <Header />
       <Switch>
         <Route path="/" exact={true} component={ListaItem} />
-        <Route path="*" component={NotFound} />
+        <Route path="/view/:id" component={VisualizarItem} />
       </Switch>
       <Footer />
     </div>
