@@ -17,7 +17,6 @@ function Item(props) {
     </div>
   );
 }
-
 function ListaItem() {
   console.log("Lista carregada");
 
@@ -142,6 +141,17 @@ function AdicionarItem(props) {
 }
 function DeleteItem(props) {
   const id = props.match.params.id;
+
+  //useState
+  const [item, setItem] = useState("");
+
+  //useEffect
+  useEffect(() => {
+    if (!item) {
+      getItemData();
+    }
+  });
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     console.log(event.target);
@@ -159,15 +169,110 @@ function DeleteItem(props) {
     console.log({ dados });
     window.location.href = `/`;
   };
+
+  const getItemData = async () => {
+    const result = await fetch(
+      "https://node-backend-nuvem.herokuapp.com/view/" + id
+    );
+    const dados = await result.json();
+    console.log({ dados });
+    setItem(dados);
+    return dados;
+  };
+  if (!item) {
+    return <div>Carregando...</div>;
+  }
+
   return (
     <div className="DeleteItem">
+      <Item item={item} />
       <form className="form" onSubmit={handleSubmit}>
         <input type="submit" value="Deletar" className="form__submit" />
       </form>
     </div>
   );
 }
-//function EditItem(props) {
+function EditItem(props) {
+  const id = props.match.params.id;
+
+  //useState
+  const [item, setItem] = useState("");
+
+  //useEffect
+  useEffect(() => {
+    if (!item) {
+      getItemData();
+    }
+  });
+
+  const getItemData = async () => {
+    const result = await fetch(
+      "https://node-backend-nuvem.herokuapp.com/view/" + id
+    );
+    const dados = await result.json();
+    setItem(dados);
+  };
+  if (!item) {
+    return <div>Carregando...</div>;
+  }
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    console.log(event.target);
+    const nome = event.target.nome.value;
+    const img = event.target.img.value;
+    const result = await fetch(
+      "https://node-backend-nuvem.herokuapp.com/filmes/" + id,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          nome,
+          img,
+        }),
+      }
+    );
+    const dados = await result.json();
+    console.log({ dados });
+    window.location.href = `/view/` + id;
+  };
+
+  return (
+    <div className="EditItem">
+      <Item item={item} />
+      <form className="form" onSubmit={handleSubmit}>
+        <label htmlFor="nome" className="form__label">
+          Nome
+        </label>
+        <input
+          type="text"
+          name="nome"
+          id="nome"
+          className="form__input"
+          placeholder={item.nome}
+          defaultValue={item.nome}
+        />
+        <br />
+        <label htmlFor="img" className="form__label">
+          Imagem
+        </label>
+        <input
+          type="text"
+          name="img"
+          id="img"
+          className="form__input"
+          placeholder={item.img}
+          defaultValue={item.img}
+        />
+        <br />
+        <input type="submit" value="Editar" className="form__submit" />
+      </form>
+    </div>
+  );
+}
 function Header() {
   return (
     <div className="Header">
@@ -185,7 +290,6 @@ function Footer() {
     </div>
   );
 }
-
 function App() {
   return (
     <div className="App">
@@ -195,6 +299,7 @@ function App() {
         <Route path="/view/:id" component={VisualizarItem} />
         <Route path="/add" component={AdicionarItem} />
         <Route path="/delete/:id" component={DeleteItem} />
+        <Route path="/edit/:id" component={EditItem} />
       </Switch>
       <Footer />
     </div>
