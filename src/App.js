@@ -10,9 +10,14 @@ function Item(props) {
         <img src={item.img} alt={item.nome} />
       </Link>
       <h3>{item.nome}</h3>
+
       <div className="item__buttons">
-        <Link to={`/delete/${item._id}`}>Deletar</Link>/
-        <Link to={`/edit/${item._id}`}>Editar</Link>
+        <Link className="item__button" to={`/delete/${item._id}`}>
+          Deletar
+        </Link>
+        <Link className="item__button" to={`/edit/${item._id}`}>
+          Editar
+        </Link>
       </div>
     </div>
   );
