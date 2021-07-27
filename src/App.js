@@ -281,7 +281,7 @@ function EditItem(props) {
 function Header() {
   return (
     <div className="Header">
-      <h1>Lista de Dognídeos - teste</h1>
+      <h1>Lista de Dognídeos - teste 1</h1>
       <nav className="Header__menu">
         <Link to="/add">Criar</Link>
       </nav>
